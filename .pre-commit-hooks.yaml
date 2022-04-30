@@ -1,6 +1,6 @@
 - id: kustomize-lint
   name: check build of kustomize
   description: prevents invalid kustomize being commited
-  entry: kustomize-lint
+  entry: kustomize-build
   language: python
-  files: kustomization.yaml
+  files: '[Kk]ustomization(?:\.ya?ml)?'
