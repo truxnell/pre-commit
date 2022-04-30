@@ -1,6 +1,6 @@
 # Pre-commit hooks
 
-This is a WIP repository for a few plannet pre-commit hooks.  These are aimed to make life easier with using k8s in a gitops fashion.
+This is a WIP repository for a few planned pre-commit hooks.  These are aimed to make life easier with using k8s in a gitops fashion.
 
 ## Planned
 
