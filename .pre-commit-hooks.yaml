@@ -3,4 +3,4 @@
   description: prevents invalid kustomize being commited
   entry: kustomize-lint
   language: python
-  files: [Kk]ustomization(?:\.ya?ml)?
+  files: kustomization.yaml
