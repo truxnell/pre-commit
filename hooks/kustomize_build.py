@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import argparse
-import subprocess
 import os
+import subprocess
 import sys
-
 from typing import Sequence
 
 
@@ -18,7 +17,7 @@ def build_kustomize(pathname):
     return result.returncode
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def main(argv=None):
 
     parser = argparse.ArgumentParser(description="Validates kustomization files")
     parser.add_argument(
@@ -48,7 +47,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     build_results = [f for f in paths if build_kustomize(f)]
 
     for error_file in build_results:
-        print("Kustomize build failed in file: {0}".format(error_file))
+        print(f"Kustomize build failed in file: {error_file}")
         return_code = 1
 
     return return_code
