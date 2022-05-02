@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="kustomize-build",
+    name="kustomize_build",
     description="Test kustomize build on kustomize files",
     url="https://github.com/Truxnell/pre-commit",
     version="0.0.1",
