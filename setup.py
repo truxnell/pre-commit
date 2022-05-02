@@ -8,6 +8,7 @@ setup(
     author="Nat Allan",
     author_email="nat@natallan.com",
     platforms="linux",
+    install_requires=["kustomize"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 2",
