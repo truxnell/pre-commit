@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 import argparse
 import subprocess
+import os
+import sys
+
 from typing import Sequence
 
 
-def build_kustomize(filename):
+def build_kustomize(pathname):
 
     result = subprocess.run(
-        ["kustomize", "build", "tests/kustomize-fail/"],
+        ["kustomize", "build", pathname],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
@@ -30,9 +33,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
+    if not args.filenames:
+        print("No arguments passed to kustomize_build")
+
+    # Strip filename from paths
+    # as kustomize must be run against base dir
+    args = [os.path.dirname(f) for f in args.filenames]
+
+    # remove any potential duplicates
+    paths = list(set(args))
+
     return_code = 0
 
-    build_results = [f for f in args.filename if build_kustomize(f)]
+    build_results = [f for f in paths if build_kustomize(f)]
 
     for error_file in build_results:
         print("Kustomize build failed in file: {0}".format(error_file))
@@ -42,4 +55,4 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))
