@@ -36,9 +36,9 @@ Alternatively, to run a single
 ## Pre-release
 
 * **kustomize-build** - Ensure modified kustomize files render
+* **kubeval-dryrun** - Apply each yaml manifest with `kubeval --dry-run=server` to ensure file will apply to server
 
 ## Planned
 
 * **helm-release-lint** - Lint a helm release file with values in file
-* **kubeval-dryrun** - Apply each yaml manifest with `kubeval --dry-run=server` to ensure file will apply to server
 * **kubeconform-lint** - Lint each yaml with kubeconform
