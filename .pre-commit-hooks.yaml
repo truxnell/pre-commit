@@ -10,4 +10,4 @@
   description: Tries yaml against kubectl dry-run
   entry: kubectl_dryrun
   language: python
-  files: ".*.y(a?)ml"
+  types: yaml
