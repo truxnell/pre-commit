@@ -3,7 +3,6 @@ import argparse
 import os
 import subprocess
 import sys
-from typing import Sequence
 
 
 def build_kustomize(pathname):
@@ -28,7 +27,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     if not args.filenames:
-        print("No arguments passed to kustomize_build")
+        print("No arguments passed")
+        return 1
 
     # Strip filename from paths
     # as kustomize must be run against base dir
