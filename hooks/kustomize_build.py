@@ -25,11 +25,6 @@ def main(argv=None):
         nargs="*",
         help="Filenames pre-commit believes are changed.",
     )
-    parser.add_argument(
-        "--enforce-all",
-        action="store_true",
-        help="Enforce all files are checked, not just staged files.",
-    )
     args = parser.parse_args(argv)
 
     if not args.filenames:
@@ -55,3 +50,11 @@ def main(argv=None):
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))
+
+
+def test_kustomize_pass():
+    assert main(["./tests/kustomize-pass/"]) == 0
+
+
+def test_kustomize_fail():
+    assert main(["./tests/kustomize-fail/"]) == 1
