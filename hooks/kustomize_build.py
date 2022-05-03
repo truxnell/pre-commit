@@ -32,10 +32,10 @@ def main(argv=None):
 
     # Strip filename from paths
     # as kustomize must be run against base dir
-    args = [os.path.dirname(f) for f in args.filenames]
+    paths = [os.path.dirname(f) for f in args.filenames]
 
     # remove any potential duplicates
-    paths = list(set(args))
+    paths = list(set(paths))
 
     return_code = 0
 
