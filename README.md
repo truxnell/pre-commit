@@ -13,6 +13,26 @@ To install, add the following to a file in the root of your repository `.pre-com
       - id: kustomize_build
 ```
 
+This hook will then run each push:
+
+## Manual run / Run on entire repo
+
+Pre-commit only checks changed files in the current commit.  It can be beneficial to run on all files at times:
+
+You can run
+
+```bash
+pre-commit run -a          # or --all-files
+```
+
+To run pre-commit on your entire repo with a single hook
+
+```bash
+pre-commit kustomize_build -a
+```
+
+Alternatively, to run a single
+
 ## Pre-release
 
 * **kustomize-build** - Ensure modified kustomize files render
