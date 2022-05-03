@@ -1,10 +1,10 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="kustomize_build",
-    description="Test kustomize build on kustomize files",
+    name="pre_commit_hooks",
+    description="A collection of hooks for managing a k8s gitops repository",
     url="https://github.com/Truxnell/pre-commit",
-    version="0.0.1",
+    version="0.0.2",
     author="Nat Allan",
     author_email="nat@natallan.com",
     platforms="linux",
@@ -24,6 +24,7 @@ setup(
     entry_points={
         "console_scripts": [
             "kustomize_build=hooks.kustomize_build:main",
+            "kubectl_dryrun=hooks.kubectl_dryrun:main",
         ],
     },
 )

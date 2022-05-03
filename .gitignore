@@ -1,2 +1,5 @@
 __pycache__
 .mypy_cache
+build
+.pytest_cache
+pre_commit_hooks.egg-info
