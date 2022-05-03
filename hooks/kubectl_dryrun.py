@@ -33,7 +33,6 @@ def main(argv=None):
         help="dry-run type",
     )
     args = parser.parse_args(argv)
-    print(args)
 
     if not args.filenames:
         print("No arguments passed for validation")
@@ -51,7 +50,9 @@ def main(argv=None):
         not in ("kustomization.yaml", "kustomization.yml", "kustomization.yml")
     ]
 
-    print("No valid files passed for validation (Kustomizations are not validated)")
+    if not paths:
+        print("No valid files passed for validation (Kustomizations are not validated)")
+        return 1
 
     build_results = [f for f in paths if kubectl_dryrun(f, type)]
 
