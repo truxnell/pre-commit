@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 
-def build_kustomize(pathname, dry_run_type=None):
+def build_kustomize(pathname, dry_run_type="client"):
 
     command = ["kustomize", "build", pathname]
     if dry_run_type:
@@ -25,6 +25,9 @@ def build_kustomize(pathname, dry_run_type=None):
 
 
 def folder_kustomize(path):
+
+    if not path:
+        return False
 
     kustomize_files = ["kustomization.yaml", "kustomization.yml", "Kustomization"]
     files = os.listdir(path)
@@ -77,6 +80,9 @@ def main(argv=None):
 
     # Remove paths without kustomization file
     paths = [f for f in paths if folder_kustomize(f)]
+    if not len(paths):
+        print("No paths with a kustomize file passed")
+        return 0
 
     return_code = 0
 
