@@ -20,11 +20,9 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
     ],
-    packages=find_packages("."),
     entry_points={
         "console_scripts": [
             "kustomize_build=hooks.kustomize_build:main",
-            "kubectl_dryrun=hooks.kubectl_dryrun:main",
         ],
     },
 )

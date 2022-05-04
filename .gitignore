@@ -3,3 +3,4 @@ __pycache__
 build
 .pytest_cache
 pre_commit_hooks.egg-info
+.vscode

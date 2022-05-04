@@ -4,6 +4,33 @@ import os
 import subprocess
 import sys
 
+import yaml
+from yaml.loader import SafeLoader
+
+
+def is_k8s_manifest(filename):
+
+    file = open(filename)
+    data = yaml.load_all(file, Loader=SafeLoader)
+
+    try:
+        for f in data:
+
+            # Check if valid k8s manifest
+            if f.get("apiVersion", False) and f.get("kind", False):
+
+                # Manifest is valid
+                # Check if a SOPS key is present
+                if f.get("sops", False):
+
+                    # Skip file - we cant check SOPS files
+                    return False
+                return True
+    except:
+        return False
+
+    return False
+
 
 def kubectl_dryrun(filename, dry_run_type):
 
@@ -12,6 +39,7 @@ def kubectl_dryrun(filename, dry_run_type):
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
+
     return result.returncode
 
 
@@ -35,8 +63,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     if not args.filenames:
-        print("No arguments passed for validation")
-        return 1
+        return False
 
     # remove any potential duplicates
     paths = list(set(args.filenames))
@@ -50,15 +77,17 @@ def main(argv=None):
         not in ("kustomization.yaml", "kustomization.yml", "kustomization.yml")
     ]
 
+    paths = [f for f in paths if is_k8s_manifest(f)]
+
     if not paths:
         print("No valid files passed for validation (Kustomizations are not validated)")
-        return 1
+        return False
 
     build_results = [f for f in paths if kubectl_dryrun(f, type)]
 
     for error_file in build_results:
         print(f"Kubeval ({type} dry-run) apply failed in file: {error_file}")
-        return_code = 1
+        return_code = True
 
     return return_code
 

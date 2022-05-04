@@ -3,11 +3,4 @@
   description: Prevents invalid kustomize being commited
   entry: kustomize_build
   language: python
-  files: '[Kk]ustomization(?:\.ya?ml)?'
-
-- id: kubectl_dryrun
-  name: Dry-run kubernetes yaml
-  description: Tries yaml against kubectl dry-run
-  entry: kubectl_dryrun
-  language: python
   types: [yaml]
