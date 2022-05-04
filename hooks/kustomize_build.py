@@ -24,6 +24,17 @@ def build_kustomize(pathname, dry_run_type=None):
     return result.returncode
 
 
+def folder_kustomize(path):
+
+    kustomize_files = ["kustomization.yaml", "kustomization.yml", "Kustomization"]
+    files = os.listdir(path)
+
+    if any(f in kustomize_files for f in files):
+        return True
+
+    return False
+
+
 def main(argv=None):
 
     parser = argparse.ArgumentParser(
@@ -64,13 +75,16 @@ def main(argv=None):
     # remove any potential duplicates
     paths = list(set(paths))
 
+    # Remove paths without kustomization file
+    paths = [f for f in paths if folder_kustomize(f)]
+
     return_code = 0
 
     build_results = [f for f in paths if build_kustomize(f, args.dry_run)]
 
     for error_file in build_results:
         print(f"Kustomize build failed in file: {error_file}")
-        return_code = 1
+        return_code = True
 
     return return_code
 
