@@ -4,16 +4,38 @@ import os
 import subprocess
 import sys
 
+import yaml
+from yaml.loader import SafeLoader
 
-def build_kustomize(pathname, dry_run_type="client"):
 
+def strip_sops(yaml_input):
+    """Remove sops key from a pyyaml input"""
+    yaml_file = [d for d in yaml.load_all(yaml_input, Loader=SafeLoader)]
+    yaml_output = []
+
+    for file in yaml_file:
+        if file.get("sops"):
+            del file["sops"]
+        yaml_output.append(file)
+
+    return yaml.dump_all(yaml_output)
+
+
+def build_kustomize(pathname, dry_run_type=None):
+    """
+    builds and optionally dry-run tests a kustomize folder
+    any sops keys are removed if a dry-run test is performed
+    """
     command = ["kustomize", "build", pathname]
     if dry_run_type:
-        kustomize_cmd = ("kustomize", "build", pathname)
-        kubectl_cmd = ("kubectl", f"--dry-run={dry_run_type}", "apply", "-f", "-")
-        ps = subprocess.Popen(kustomize_cmd, stdout=subprocess.PIPE)
-        result = subprocess.run(kubectl_cmd, stdin=ps.stdout)
-        ps.wait()
+        try:
+            kustomize_cmd = ("kustomize", "build", pathname)
+            kubectl_cmd = ("kubectl", f"--dry-run={dry_run_type}", "apply", "-f", "-")
+            kustomize = subprocess.check_output(kustomize_cmd)
+            kustomize = strip_sops(kustomize.decode())
+            result = subprocess.run(kubectl_cmd, input=kustomize.encode("ascii"))
+        except:
+            return 1
     else:
         result = subprocess.run(
             command,
@@ -25,7 +47,7 @@ def build_kustomize(pathname, dry_run_type="client"):
 
 
 def folder_kustomize(path):
-
+    """check if a path has a valid kustomization file present"""
     if not path:
         return False
 
@@ -39,7 +61,9 @@ def folder_kustomize(path):
 
 
 def main(argv=None):
-
+    """
+    parse program imputs and perform kustomize build/kubectl dry-run (optional)
+    """
     parser = argparse.ArgumentParser(
         description="Validates kustomization files and optionally runs kubectl --dry-run on result"
     )
@@ -89,7 +113,7 @@ def main(argv=None):
     build_results = [f for f in paths if build_kustomize(f, args.dry_run)]
 
     for error_file in build_results:
-        print(f"Kustomize build failed in file: {error_file}")
+        print(f"Kustomize build failed in folder: {error_file}")
         return_code = True
 
     return return_code
@@ -108,8 +132,8 @@ def test_kustomize_fail():
 
 
 def test_kustomize_dryrun_pass():
-    assert main(["./tests/kustomize-pass/ --dry-run client"]) == 0
+    assert main(["./tests/kustomize-pass/", "--dry-run=client"]) == 0
 
 
 def test_kustomize_dryrun_fail():
-    assert main(["./tests/kustomize-fail/ --dry-run client"]) == 1
+    assert main(["./tests/kustomize-fail/", "--dry-run=client"]) == 1
