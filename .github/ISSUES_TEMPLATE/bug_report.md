@@ -22,8 +22,11 @@ Steps to reproduce the behavior including the any code snippets and module input
 A clear and concise description of what you expected to happen.
 
 **Nice to have**
+
 - [ ] Terminal output
-- [ ] Screenshots
+- [ ] Link to the yaml that causes the isssue (permalink)
+- [ ] Alternatively a copy of the yaml that cause the issue if commit not possible.
+- [ ] Which files were attempted to commit.
 
 **Additional context**
 Add any other context about the problem here.
